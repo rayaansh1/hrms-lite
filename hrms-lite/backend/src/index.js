@@ -28,8 +28,13 @@ app.use(notFound);
 app.use(errorHandler);
 
 // DB Connection + Server Start
+if (!process.env.MONGODB_URI) {
+  console.error('MONGODB_URI is not defined');
+  process.exit(1);
+}
+
 mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hrms-lite')
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
